@@ -31,15 +31,14 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         title: Text('Map'),
         actions: [
-          widget.isSelecting
-              ? IconButton(
-                  icon: Icon(Icons.check),
-                  onPressed: _pickedLocation == null
-                      ? null
-                      : () {
-                          Navigator.of(context).pop(_pickedLocation);
-                        })
-              : null
+          if (widget.isSelecting)
+            IconButton(
+                icon: Icon(Icons.check),
+                onPressed: _pickedLocation == null
+                    ? null
+                    : () {
+                        Navigator.of(context).pop(_pickedLocation);
+                      })
         ],
       ),
       body: GoogleMap(
@@ -49,7 +48,12 @@ class _MapScreenState extends State<MapScreen> {
                 widget.initialLocation.longitude)),
         onTap: widget.isSelecting ? _selectLocation : null,
         markers: _pickedLocation == null
-            ? null
+            ? {
+                Marker(
+                    markerId: MarkerId('m1'),
+                    position: LatLng(widget.initialLocation.latitude,
+                        widget.initialLocation.longitude))
+              }
             : {Marker(markerId: MarkerId('m1'), position: _pickedLocation)},
       ),
     );
